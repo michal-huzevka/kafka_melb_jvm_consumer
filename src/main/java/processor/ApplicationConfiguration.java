@@ -17,6 +17,12 @@ public class ApplicationConfiguration {
     @Value("${app.topic}")
     private String topic;
 
+    @Value("${app.brokerList}")
+    private String brokerList;
+
+    @Value("${app.airline}")
+    private String airline;
+
     public String getZooKeeper() {
         return zooKeeper;
     }
@@ -29,4 +35,11 @@ public class ApplicationConfiguration {
         return topic;
     }
 
+    public String getBrokerList() {
+        return brokerList;
+    }
+
+    public String getAirline() {
+        return airline;
+    }
 }

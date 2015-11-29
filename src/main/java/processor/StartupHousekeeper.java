@@ -12,6 +12,9 @@ public class StartupHousekeeper implements ApplicationListener<ContextRefreshedE
 
     @Autowired
     private ApplicationConfiguration appConfig;
+
+    @Autowired
+    private KafkaProducerBean producerBean;
     private boolean started = false;
 
 
@@ -35,7 +38,7 @@ public class StartupHousekeeper implements ApplicationListener<ContextRefreshedE
         String topic = appConfig.getTopic();
         int threads = 4;
 
-        ConsumerGroup example = new ConsumerGroup(zooKeeper, groupId, topic);
+        ConsumerGroup example = new ConsumerGroup(zooKeeper, groupId, topic, producerBean, appConfig.getAirline());
         example.run(threads);
 
     }

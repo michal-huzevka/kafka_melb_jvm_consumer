@@ -2,6 +2,7 @@ package processor.kafka;
 import kafka.consumer.ConsumerConfig;
 import kafka.consumer.KafkaStream;
 import kafka.javaapi.consumer.ConsumerConnector;
+import processor.KafkaProducerBean;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,12 +17,16 @@ public class ConsumerGroup {
     private final String topic;
     private  ExecutorService executor;
     private String groupId;
+    private KafkaProducerBean producerBean;
+    private String airline;
 
-    public ConsumerGroup(String a_zookeeper, String groupId, String a_topic) {
+    public ConsumerGroup(String a_zookeeper, String groupId, String a_topic, KafkaProducerBean producerBean, String airline) {
         this.groupId = groupId;
         consumer = kafka.consumer.Consumer.createJavaConsumerConnector(
                 createConsumerConfig(a_zookeeper, groupId));
         this.topic = a_topic;
+        this.producerBean = producerBean;
+        this.airline = airline;
     }
 
     public void shutdown() {
@@ -46,7 +51,7 @@ public class ConsumerGroup {
 
         int threadNumber = 0;
         for (final KafkaStream stream : streams) {
-            executor.submit(new Consumer(stream, threadNumber, groupId));
+            executor.submit(new Consumer(stream, threadNumber, groupId, producerBean, airline));
             threadNumber++;
         }
     }
